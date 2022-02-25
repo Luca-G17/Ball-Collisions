@@ -5,11 +5,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="ea60ae0a-dc05-4b81-a64e-9b19d7b40a0c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/App.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/App.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Entity.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Entity.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/example/PhysicsLoop.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/PhysicsLoop.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/PrimaryController.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/PrimaryController.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/org/example/Renderer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/example/Renderer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/org/example/primary.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/org/example/primary.fxml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/App.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/App.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Entity.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/Entity.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$1.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$1.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$2.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$2.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$3.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$3.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$4.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/PrimaryController$4.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/PrimaryController.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/PrimaryController.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/classes/org/example/Renderer.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/Renderer.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/target/classes/org/example/primary.fxml" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/org/example/primary.fxml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +35,7 @@
     </option>
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/../../.." />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
@@ -45,12 +55,13 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../GraphTraversal" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="node.js.detected.package.eslint" value="true" />
     <property name="node.js.detected.package.tslint" value="true" />
     <property name="node.js.selected.package.eslint" value="(autodetect)" />
     <property name="node.js.selected.package.tslint" value="(autodetect)" />
     <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.DirectoryMappings" />
   </component>
   <component name="RunManager">
     <configuration name="App" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
@@ -87,6 +98,7 @@
       <workItem from="1645729765233" duration="7685000" />
       <workItem from="1645737473305" duration="3122000" />
       <workItem from="1645777623899" duration="4350000" />
+      <workItem from="1645790621245" duration="9249000" />
     </task>
     <servers />
   </component>
@@ -106,5 +118,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
+    <ignored-roots>
+      <path value="$PROJECT_DIR$/../../.." />
+    </ignored-roots>
   </component>
 </project>

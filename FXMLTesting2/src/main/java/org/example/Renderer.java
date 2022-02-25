@@ -43,7 +43,7 @@ public class Renderer {
             Point2D pos = entity.getDrawPosition();
             context.setLineWidth(1.5);
             context.setStroke(Color.rgb(0, 0, 0, 1));
-            context.strokeOval(pos.getX(), pos.getY(), entity.getHeight() * 2, entity.getHeight() * 2);
+            context.strokeOval(pos.getX(), pos.getY(), entity.getRadius() * 2, entity.getRadius() * 2);
         }
         context.restore();
     }

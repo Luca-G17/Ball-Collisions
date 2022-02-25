@@ -1,23 +1,20 @@
 package org.example;
 
 import javafx.geometry.Point2D;
-import javafx.scene.shape.Rectangle;
-import javafx.scene.shape.Shape;
 
 
 public class Entity {
     private Point2D position;
     private float rotation;
-    private double height;
-    private double width;
+    private double radius;
     private double mass;
     private Point2D currentVelocityVector = new Point2D(0, 0);
     private Point2D currentAccelerationVector = new Point2D(0, 0);
-    public Entity(double x, double y, double height, double width){
+
+    public Entity(double x, double y, double radius){
         position = new Point2D(x, y);
-        this.height = height;
-        this.width = width;
-        this.mass = height * 10;
+        this.radius = radius;
+        this.mass = radius * 10;
     }
 
     public double getMass() {
@@ -40,7 +37,7 @@ public class Entity {
     }
     public Point2D getCenter(){
         Point2D pos = getDrawPosition();
-        return new Point2D(pos.getX() + width, pos.getY() + height);
+        return new Point2D(pos.getX() + radius, pos.getY() + radius);
     }
     public void setPosition(Point2D pos){
         this.position = pos;
@@ -71,7 +68,7 @@ public class Entity {
         );
     }
     public void update(float elapsedTime, double width, double height){
-        currentAccelerationVector = currentVelocityVector.multiply(-0.01);
+        currentAccelerationVector = currentVelocityVector.multiply(PrimaryController.DRAG_SCALAR);
         currentVelocityVector = currentVelocityVector.add(currentAccelerationVector.multiply(elapsedTime));
         position = position.add(currentVelocityVector.multiply(elapsedTime));
         Point2D centre = getCenter();
@@ -81,10 +78,10 @@ public class Entity {
         if (centre.getY() >= height) position = new Point2D(position.getX(), position.getY() - height);
         if (Point2D.ZERO.distance(currentVelocityVector) < 0.01) currentVelocityVector = Point2D.ZERO;
     }
-    public double getHeight(){
-        return height;
+    public int getEnergy(){
+        return (int) Math.round(0.5 * mass * currentVelocityVector.magnitude() * currentVelocityVector.magnitude() * PrimaryController.ENERGY_OUTPUT_SCALAR);
     }
-    public double getWidth(){
-        return width;
+    public double getRadius(){
+        return radius;
     }
 }

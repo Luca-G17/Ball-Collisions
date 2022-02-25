@@ -6,6 +6,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Point2D;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Background;
@@ -17,6 +18,7 @@ import javafx.scene.paint.CycleMethod;
 import javafx.scene.paint.RadialGradient;
 import javafx.scene.paint.Stop;
 import javafx.scene.shape.Circle;
+import javafx.scene.text.Font;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -24,14 +26,17 @@ import java.util.List;
 import java.util.Random;
 
 public class PrimaryController {
-
+    @FXML
+    private Label energyLabel;
     @FXML
     private Canvas canvas;
     @FXML
     private Pane anchorPane;
     private Entity selectedBall;
-
-
+    private int systemEnergy;
+    public static final int BALL_COUNT = 30;
+    public static final double DRAG_SCALAR = 0; // -0.01 is good
+    public static final double ENERGY_OUTPUT_SCALAR = 0.00001;
     public void initialize(){
         Random rand = new Random();
         canvas.widthProperty().bind(anchorPane.widthProperty());
@@ -46,15 +51,14 @@ public class PrimaryController {
                 Insets.EMPTY
         )));
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        // drawLines(gc);
-        // anchorPane.getChildren().add(new Circle(40));
-
+        energyLabel.toFront();
+        energyLabel.setFont(new Font("Cambria", 30));
         Renderer renderer = new Renderer(this.canvas);
-        for (int i = 0; i < 30; i++){
+        for (int i = 0; i < BALL_COUNT; i++){
             int rad = rand.nextInt(50) + 10;
             int x = (int) Math.round(anchorPane.getMinHeight());
             int y = (int) Math.round(anchorPane.getMinHeight());
-            Entity newCircle = new Entity(rand.nextInt(x), rand.nextInt(y), rad, rad);
+            Entity newCircle = new Entity(rand.nextInt(x), rand.nextInt(y), rad);
             renderer.addEntity(newCircle);
         }
         canvas.setOnMouseReleased(new EventHandler<MouseEvent>() {
@@ -81,7 +85,7 @@ public class PrimaryController {
                     if (selectedBall != null){
                         double x = mouseEvent.getX();
                         double y = mouseEvent.getY();
-                        double r = selectedBall.getHeight();
+                        double r = selectedBall.getRadius();
                         selectedBall.setPosition(new Point2D(x - r, y - r));
                     }
                 }
@@ -95,7 +99,7 @@ public class PrimaryController {
                     double x = mouseEvent.getX();
                     double y = mouseEvent.getY();
                     for (Entity entity : renderer.getEntities()){
-                        if (isPointInBall(entity.getCenter(), entity.getHeight(), x, y)){
+                        if (isPointInBall(entity.getCenter(), entity.getRadius(), x, y)){
                             selectedBall = entity;
                             break;
                         }
@@ -107,36 +111,39 @@ public class PrimaryController {
             @Override
             public void tick(float secondsSinceLastFrame) {
                 renderer.prepare();
-                List<Pair<Entity, Entity>> collidingBalls = new ArrayList<>();
-                updateBalls(renderer, secondsSinceLastFrame);
+                updateBalls(renderer);
+                systemEnergy = 0;
                 for (Entity entity : renderer.getEntities()){
                     entity.update(secondsSinceLastFrame, anchorPane.getWidth(), anchorPane.getHeight());
+                    systemEnergy += entity.getEnergy();
                 }
+
+                energyLabel.setText(String.format("Energy: %d", systemEnergy));
                 renderer.render();
             }
         };
         timer.start();
     }
-    private void updateBalls(Renderer renderer, float elapsedTime){
+    private void updateBalls(Renderer renderer){
         for (Entity entity1 : renderer.getEntities()){
             for (Entity entity2 : renderer.getEntities()){
                 if (!entity1.equals(entity2)){
-                    Point2D b1Centre = entity1.getCenter();
-                    Point2D b2Centre = entity2.getCenter();
-                    if (doBallsOverlap(b1Centre, entity1.getHeight(), b2Centre, entity2.getHeight())){
-                        double distance = Math.sqrt((b1Centre.getX() - b2Centre.getX()) * (b1Centre.getX() - b2Centre.getX()) +
-                                (b1Centre.getY() - b2Centre.getY()) * (b1Centre.getY() - b2Centre.getY()));
-                        double overlap = Math.floor(0.5 * (distance - entity1.getHeight() - entity2.getHeight()));
+                    Point2D b1 = entity1.getCenter();
+                    Point2D b2 = entity2.getCenter();
+                    boolean contact = false;
+                    double distance = Math.sqrt(squareDistance(b1, entity1.getRadius(), b2, entity2.getRadius()));
+                    if (doBallsOverlap(b1, entity1.getRadius(), b2, entity2.getRadius())){
+                        contact = true;
                         Point2D b1Pos = entity1.getPosition();
                         Point2D b2Pos = entity2.getPosition();
+                        double overlap = Math.floor(0.5 * (distance - entity1.getRadius() - entity2.getRadius())) - 0.01;
                         double xOffset = overlap * (b1Pos.getX() - b2Pos.getX()) / distance;
                         double yOffset = overlap * (b1Pos.getY() - b2Pos.getY()) / distance;
                         entity1.setPosition(new Point2D(b1Pos.getX() - xOffset, b1Pos.getY() - yOffset));
-                        entity2.setPosition(new Point2D(b2Pos.getX() + xOffset, b2Pos.getY()                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              + yOffset));
-
-                        Point2D b1 = entity1.getCenter();
-                        Point2D b2 = entity2.getCenter();
-                        double d = Math.sqrt(squareDistance(b1, entity1.getHeight(), b2, entity2.getHeight()));
+                        entity2.setPosition(new Point2D(b2Pos.getX() + xOffset, b2Pos.getY() + yOffset));
+                        b1 = entity1.getCenter();
+                        b2 = entity2.getCenter();
+                        double d = Math.sqrt(squareDistance(b1, entity1.getRadius(), b2, entity2.getRadius()));
                         //Normal
                         Point2D normal = new Point2D (((b2.getX() - b1.getX()) / d),
                                 ((b2.getY() - b1.getY())) / d);
@@ -150,21 +157,25 @@ public class PrimaryController {
                         double dpNorm2 = normal.dotProduct(entity2.getVelocity());
                         // Conservation of momentum in 1D
                         double m1 = (dpNorm1 * (entity1.getMass() - entity2.getMass()) + (2 * entity2.getMass() * dpNorm2)) / (entity1.getMass() + entity2.getMass());
-                        double m2 = ((dpNorm1 * entity1.getMass()) + ((entity2.getMass() - entity1.getMass()) * dpNorm2)) / (entity1.getMass() + entity2.getMass());
+                        double m2 = ((2 * dpNorm1 * entity1.getMass()) + ((entity2.getMass() - entity1.getMass()) * dpNorm2)) / (entity1.getMass() + entity2.getMass());
 
                         entity1.setVelocity(tangent.multiply(dpTan1).add(normal.multiply(m1)));
                         entity2.setVelocity(tangent.multiply(dpTan2).add(normal.multiply(m2)));
                     }
-                    double distance = Math.sqrt(squareDistance(b1Centre, entity1.getHeight(), b2Centre, entity2.getHeight()));
-                    addConnectingLine(renderer.getContext(), b1Centre, b2Centre, distance);
+                    addConnectingLine(renderer.getContext(), b1, b2, distance, contact);
                 }
             }
         }
     }
-    private void addConnectingLine(GraphicsContext context, Point2D ball, Point2D target, double distance){
-        double alpha = (-distance / (200)) + 1;
-        alpha = alpha >= 0 ? alpha : 0;
-        context.setStroke(Color.rgb(2, 80, 207, alpha));
+    private void addConnectingLine(GraphicsContext context, Point2D ball, Point2D target, double distance, boolean contact){
+        if (!contact) {
+            double alpha = (-distance / (200)) + 1;
+            alpha = alpha >= 0 ? alpha : 0;
+            context.setStroke(Color.rgb(2, 80, 207, alpha));
+        }
+        else{
+            context.setStroke(Color.RED);
+        }
         context.strokeLine(ball.getX(), ball.getY(), target.getX(), target.getY());
     }
     private boolean isPointInBall(Point2D ball, double r1, double x, double y){
@@ -176,13 +187,5 @@ public class PrimaryController {
     private boolean doBallsOverlap(Point2D b1, double r1, Point2D b2, double r2){
         double distance = (b1.getX() - b2.getX()) * (b1.getX() - b2.getX()) + (b1.getY() - b2.getY()) * (b1.getY() - b2.getY());
         return distance <= (r1 + r2) * (r1 + r2);
-    }
-    private void drawLines(GraphicsContext gc){
-        gc.beginPath();
-        gc.moveTo(30.5, 30.5);
-        gc.lineTo(150.5, 30.5);
-        gc.lineTo(150.5, 150.5);
-        gc.lineTo(30.5, 30.5);
-        gc.stroke();
     }
 }
